@@ -1,0 +1,32 @@
+name: jaeger
+services:
+    jaeger:
+        container_name: jaeger
+        environment:
+          - COLLECTOR_OTLP_ENABLED=true
+        healthcheck:
+          test: ["CMD", "wget", "--spider", "-q", "http://localhost:16686"]
+          interval: 30s
+          timeout: 10s
+          retries: 3
+        image: cr.jaegertracing.io/jaegertracing/jaeger:2.13.0
+        ports:
+            - 16686:16686
+            - 4317:4317
+            - 4318:4318
+            - 5778:5778
+            - 9411:9411
+        restart: unless-stopped
+        deploy:
+            resources:
+                limits:
+                    cpus: '1.0'
+                    memory: 1G
+                reservations:
+                    cpus: '0.5'
+                    memory: 512M
+        volumes:
+          - jaeger-data:/badger
+volumes:
+  jaeger-data:
+    driver: local
