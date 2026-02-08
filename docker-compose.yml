@@ -1,7 +1,6 @@
 name: jaeger
 services:
     jaeger:
-        container_name: jaeger
         environment:
           - COLLECTOR_OTLP_ENABLED=true
         healthcheck:
@@ -9,7 +8,7 @@ services:
           interval: 30s
           timeout: 10s
           retries: 3
-        image: cr.jaegertracing.io/jaegertracing/jaeger:2.13.0
+        image: cr.jaegertracing.io/jaegertracing/jaeger:2.15.0
         ports:
             - 16686:16686
             - 4317:4317
