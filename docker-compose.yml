@@ -3,19 +3,6 @@ services:
     jaeger:
         environment:
           - COLLECTOR_OTLP_ENABLED=true
-        healthcheck:
-          test: ["CMD", "wget", "--spider", "-q", "http://localhost:16686"]
-          interval: 30s
-          timeout: 10s
-          retries: 3
-        image: cr.jaegertracing.io/jaegertracing/jaeger:2.15.0
-        ports:
-            - 16686:16686
-            - 4317:4317
-            - 4318:4318
-            - 5778:5778
-            - 9411:9411
-        restart: unless-stopped
         deploy:
             resources:
                 limits:
@@ -24,6 +11,24 @@ services:
                 reservations:
                     cpus: '0.5'
                     memory: 512M
+        healthcheck:
+          test: ["CMD", "wget", "--spider", "-q", "http://localhost:16686"]
+          interval: 30s
+          timeout: 10s
+          retries: 3
+        image: cr.jaegertracing.io/jaegertracing/jaeger:2.15.0
+        labels:
+            - flame.type=application
+            - flame.name=jaeger
+            - flame.url=https://jaeger.tiogars.fr
+            - flame.icon=docker
+        ports:
+            - 16686:16686
+            - 4317:4317
+            - 4318:4318
+            - 5778:5778
+            - 9411:9411
+        restart: unless-stopped
         volumes:
           - jaeger-data:/badger
 volumes:
